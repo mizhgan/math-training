@@ -1,110 +1,147 @@
 <template>
-  <TransitionGroup name="fade">
-    <q-page key="training" v-if="trainingIsActive">
-      <div class="flex flex-center q-pb-md">
-        <q-chip color="blue" text-color="white" icon="alarm"
-          >{{ duration }} сек.</q-chip
-        >
-        <q-chip icon="event"> {{ step }}</q-chip>
-      </div>
-      <div class="flex flex-center q-pb-md">
-        <q-input
-          ref="result"
-          v-model="q.result.val"
-          v-touch-repeat.enter="nextQuestion"
-          type="number"
-          filled
-          style="max-width: 200px"
-          :readonly="q.result.known"
-          :autofocus="!q.result.known"
-          @update:model-value="update"
-          :key="step"
-        />
-        :
-        <q-input
-          ref="m1"
-          v-model="q.m1.val"
-          v-touch-repeat.enter="nextQuestion"
-          type="number"
-          filled
-          style="max-width: 200px"
-          :readonly="q.m1.known"
-          :autofocus="!q.m1.known"
-          @update:model-value="update"
-          :key="step"
-        />
-        =
-        <q-input
-          ref="m2"
-          v-model="q.m2.val"
-          v-touch-repeat.enter="nextQuestion"
-          type="number"
-          filled
-          style="max-width: 200px"
-          :readonly="q.m2.known"
-          :autofocus="!q.m2.known"
-          @update:model-value="update('m2')"
-          :key="step"
-        />
-      </div>
-      <div v-if="$q.platform.is.mobile" class="flex flex-center">
-        <q-btn
-          color="blue"
-          size="lg"
-          label="Ввод"
-          @click="nextQuestion"
-          :key="step"
-        />
-      </div>
-      <div class="flex flex-center">
-        <q-btn
-          color="red"
-          size="lg"
-          label="Закончить"
-          @click="stopTraining"
-          :key="step"
-        />
-      </div>
-    </q-page>
-    <q-page key="initial" v-else class="flex flex-center">
-      <div>
-        <div v-if="step > 1">
-          <div>
-            <q-chip icon="event"
-              >Всего задач решено:
-              {{ MultResults.correct + MultResults.incorrect }}</q-chip
-            >
-          </div>
-          <div>
-            <q-chip class="glossy" color="green" text-color="white" icon="star">
-              Правильных ответов: {{ MultResults.correct }}
-            </q-chip>
-          </div>
-          <div>
-            <q-chip
-              class="glossy"
+  <q-page class="flex flex-center">
+    <Transition
+      appear
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
+      mode="out-in"
+    >
+      <div
+        key="training"
+        style="width: 100%; height: 100%"
+        v-if="trainingIsActive"
+      >
+        <!-- <div class="flex flex-center q-pb-md">
+          <Transition
+            appear
+            enter-active-class="animated fadeIn"
+            leave-active-class="animated fadeOut"
+            mode="out-in"
+          >
+            <q-icon
+              :key="`tu${step}`"
+              name="thumb_up"
+              color="green"
+              size="100px"
+            />
+            <q-icon
+              :key="`td${step}`"
+              name="thumb_down"
               color="red"
-              text-color="white"
-              icon="directions"
-            >
-              Ошибок: {{ MultResults.incorrect }}
-            </q-chip>
-          </div>
-          <div>
-            <q-chip color="blue" text-color="white" icon="alarm"
-              >Время: {{ duration }} сек.</q-chip
-            >
-          </div>
+              size="100px"
+            />
+          </Transition>
+        </div> -->
+        <div class="flex flex-center q-pb-md">
+          <q-chip color="blue" text-color="white" icon="alarm" size="xl"
+            >{{ duration }} сек.</q-chip
+          >
+          <q-chip icon="event" size="xl"> {{ step }}</q-chip>
         </div>
-        <q-btn
-          color="green"
-          size="lg"
-          label="Начать проверку"
-          @click="startTraining"
-        />
+        <Transition
+          appear
+          enter-active-class="animated zoomIn"
+          leave-active-class="animated zoomOut"
+          mode="out-in"
+        >
+          <div :key="`form${step}`" class="flex flex-center q-pb-md">
+            <q-input
+              ref="result"
+              v-model="q.result.val"
+              @keyup.enter="nextQuestion"
+              type="number"
+              filled
+              style="max-width: 200px"
+              :readonly="q.result.known"
+              :autofocus="!q.result.known"
+              @update:model-value="update"
+              :key="`result${step}`"
+            />
+            <q-icon name="fa-solid fa-divide" size="xl" />
+            <!-- <q-icon name="close" size="xl" /> -->
+            <q-input
+              ref="m1"
+              v-model="q.m1.val"
+              @keyup.enter="nextQuestion"
+              type="number"
+              filled
+              style="max-width: 200px"
+              :readonly="q.m1.known"
+              :autofocus="!q.m1.known"
+              @update:model-value="update"
+              :key="`m1${step}`"
+            />
+
+            <q-icon name="fa-solid fa-equals" size="xl" />
+            <!-- <q-icon name="density_large" size="xl" /> -->
+            <q-input
+              ref="m2"
+              v-model="q.m2.val"
+              @keyup.enter="nextQuestion"
+              type="number"
+              filled
+              style="max-width: 200px"
+              :readonly="q.m2.known"
+              :autofocus="!q.m2.known"
+              @update:model-value="update('m2')"
+              :key="`m2${step}`"
+            />
+          </div>
+        </Transition>
+        <div v-if="$q.platform.is.mobile" class="flex flex-center">
+          <q-btn color="blue" size="lg" label="Ввод" @click="nextQuestion" />
+        </div>
+        <div class="flex flex-center">
+          <q-btn
+            color="red"
+            size="lg"
+            label="Закончить"
+            @click="stopTraining"
+          />
+        </div>
       </div>
-    </q-page>
-  </TransitionGroup>
+      <div key="initial" v-else>
+        <div v-if="step > 1" class="flex flex-center q-pb-md q-pt-md">
+          <q-chip icon="event" size="xl"
+            >Всего задач решено:
+            {{ MultResults.correct + MultResults.incorrect }}</q-chip
+          >
+
+          <q-chip
+            class="glossy"
+            color="green"
+            text-color="white"
+            icon="star"
+            size="xl"
+          >
+            Правильных ответов: {{ MultResults.correct }}
+          </q-chip>
+
+          <q-chip
+            class="glossy"
+            color="red"
+            text-color="white"
+            icon="directions"
+            size="xl"
+          >
+            Ошибок: {{ MultResults.incorrect }}
+          </q-chip>
+
+          <q-chip color="blue" text-color="white" icon="alarm" size="xl"
+            >Время: {{ duration }} сек.</q-chip
+          >
+        </div>
+        <div class="flex flex-center q-pb-md">
+          <q-btn
+            color="green"
+            size="lg"
+            label="Начать проверку"
+            @click="startTraining"
+          />
+        </div>
+      </div>
+    </Transition>
+  </q-page>
 </template>
 
 <script setup>
@@ -168,9 +205,24 @@ const isCorrect = computed(() => {
   );
 });
 
-const nextQuestion = () => {
+const sleep = (ms) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(true);
+    }, ms);
+  });
+};
+
+const nextQuestion = async () => {
+  if (
+    q.value.m1.val === null ||
+    q.value.m2.val === null ||
+    q.value.result.val === null
+  )
+    return;
   if (isCorrect.value) MultResults.value.correct++;
   else MultResults.value.incorrect++;
+  // await sleep(5000);
   step.value++;
   getQuestion();
 };
