@@ -46,44 +46,53 @@
         >
           <div :key="`form${step}`" class="flex flex-center q-pb-md">
             <q-input
+              class="input"
               ref="m1"
               v-model="q.m1.val"
               @keyup.enter="nextQuestion"
               type="number"
-              filled
+              outlined
               style="max-width: 200px"
               :readonly="q.m1.known"
+              :disable="q.m1.known"
               :autofocus="!q.m1.known"
               @update:model-value="update"
               :key="`m1${step}`"
+              :bg-color="q.m1.known ? 'white' : 'orange-2'"
             />
             <q-icon name="fa-solid fa-xmark" size="xl" />
             <!-- <q-icon name="close" size="xl" /> -->
             <q-input
+              class="input"
               ref="m2"
               v-model="q.m2.val"
               @keyup.enter="nextQuestion"
               type="number"
-              filled
+              outlined
               style="max-width: 200px"
               :readonly="q.m2.known"
+              :disable="q.m2.known"
               :autofocus="!q.m2.known"
               @update:model-value="update('m2')"
               :key="`m2${step}`"
+              :bg-color="q.m2.known ? 'white' : 'orange-2'"
             />
             <q-icon name="fa-solid fa-equals" size="xl" />
             <!-- <q-icon name="density_large" size="xl" /> -->
             <q-input
+              class="input"
               ref="result"
               v-model="q.result.val"
               @keyup.enter="nextQuestion"
               type="number"
-              filled
+              outlined
               style="max-width: 200px"
               :readonly="q.result.known"
+              :disable="q.result.known"
               :autofocus="!q.result.known"
               @update:model-value="update"
               :key="`result${step}`"
+              :bg-color="q.result.known ? 'white' : 'orange-2'"
             />
           </div>
         </Transition>
@@ -242,3 +251,9 @@ const stopTraining = () => {
   clearInterval(timer.value);
 };
 </script>
+
+<style lang="scss" scoped>
+.input {
+  font-size: 1.75rem;
+}
+</style>
